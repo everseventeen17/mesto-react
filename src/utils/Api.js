@@ -5,19 +5,22 @@ class Api {
     this._headers = apiData.headers; // токен
   }
 
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    } else {
+      return Promise.reject(`Ошибка ${res.status}`);
+    }
+  }
+
+
   // 1. Загрузка информации о пользователе с сервера
   getProfileData() {
     return fetch(`${this._link}users/me`, {
       headers: this._headers,
       method: 'GET',
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+      .then(this._checkResponse)
   };
 
   // 2. Загрузка карточек с сервера
@@ -26,13 +29,7 @@ class Api {
       headers: this._headers,
       method: 'GET',
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+    .then(this._checkResponse)
   };
 
   // 3. Редактирование профиля
@@ -42,13 +39,7 @@ class Api {
       method: 'PATCH',
       body: JSON.stringify({ name: profileData.profileName, about: profileData.profileUserAbout })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+    .then(this._checkResponse)
   };
 
   // 4. Добавление новой карточки
@@ -58,13 +49,7 @@ class Api {
       method: 'POST',
       body: JSON.stringify({ name, link })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+    .then(this._checkResponse)
   };
 
   // 5. Удаление карточки
@@ -73,13 +58,7 @@ class Api {
       headers: this._headers,
       method: 'DELETE',
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+    .then(this._checkResponse)
   };
 
   // 6. Постановка и снятие лайка
@@ -89,13 +68,7 @@ class Api {
       headers: this._headers,
       method: 'PUT',
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+    .then(this._checkResponse)
   };
 
   // публичный метод убрать лайк с сервера
@@ -104,13 +77,7 @@ class Api {
       headers: this._headers,
       method: 'DELETE',
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+    .then(this._checkResponse)
   };
 
   // 7. Обновление аватара пользователя
@@ -120,13 +87,7 @@ class Api {
       method: 'PATCH',
       body: JSON.stringify({ avatar: avatarUrl.avatarUrl })
     })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-        };
-      })
+      .then(this._checkResponse)
   };
 }
 export const api = new Api(apiData);

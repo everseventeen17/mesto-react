@@ -3,27 +3,27 @@ import { api } from "../utils/Api.js";
 import Card from "./Card.js";
 
 function Main(props) {
-  const [userName, setUserName] = React.useState('');
-  const [userDescription, setUserDescription] = React.useState('');
-  const [userAvatar, setUserAvatar] = React.useState('');
-  const [cards, setCards] = React.useState([]);
+  const [userName, setIsUserName] = React.useState('');
+  const [userDescription, setIsUserDescription] = React.useState('');
+  const [userAvatar, setIsUserAvatar] = React.useState('');
+  const [cards, setIsCards] = React.useState([]);
 
   React.useEffect(() => {
     api.getProfileData()
       .then((data) => {
-        setUserName(data.name);
-        setUserDescription(data.about);
-        setUserAvatar(data.avatar);
+        setIsUserName(data.name);
+        setIsUserDescription(data.about);
+        setIsUserAvatar(data.avatar);
       })
       .catch((err) => {
         console.log(err);
       })
-  })
+  }, [])
 
   React.useEffect(() => {
     api.getInitialCards()
       .then((data) => {
-        setCards(data);
+        setIsCards(data);
       })
       .catch((err) => {
         console.log(err);
@@ -52,13 +52,13 @@ function Main(props) {
       </section>
       <section className="elements">
 
-        {cards.map(card =>
+        {cards.map((card) => (
           <Card
             card={card}
             onCardClick={props.onCardClick}
             key={card._id}
           />
-        )}
+        ))}
 
       </section>
     </main>
