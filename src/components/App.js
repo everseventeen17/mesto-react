@@ -21,7 +21,10 @@ function App() {
   const [selectedCard, setIsSelectedCard] = React.useState({ name: '', link: '' });
   const [cards, setIsCards] = React.useState([]);
   const [cardId, setIsCardId] = React.useState('');
-  const [currentUser, setCurrentUser] = React.useState('');
+  const [currentUser, setCurrentUser] = React.useState({});
+
+  const isOpen = isEditAvatarPopupOpen || isConfirmPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || selectedCard.link
+
 
   function handleEditProfilePopupOpen() {
     setIsEditProfilePopupOpen(true);
@@ -50,6 +53,20 @@ function App() {
   function handleCardClick(card) {
     setIsSelectedCard(card)
   }
+
+  React.useEffect(() => {
+    function closeByEscape(evt) {
+      if(evt.key === 'Escape') {
+        closeAllPopups();
+      }
+    }
+    if(isOpen) { // навешиваем только при открытии
+      document.addEventListener('keydown', closeByEscape);
+      return () => {
+        document.removeEventListener('keydown', closeByEscape);
+      }
+    }
+  }, [isOpen])
 
   React.useEffect(() => {
     api.getProfileData()
@@ -126,7 +143,6 @@ function App() {
   }
 
   return (
-    <>
       <CurrentUserContext.Provider value={currentUser}>
         <Header />
         <Main
@@ -176,7 +192,6 @@ function App() {
           onClose={closeAllPopups}
         />
       </CurrentUserContext.Provider>
-    </>
   );
 }
 

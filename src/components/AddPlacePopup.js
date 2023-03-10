@@ -11,9 +11,12 @@ function AddPlacePopup(props) {
       name: inputPlaceTitle.current.value,
       link: inputPlaceUrl.current.value
     });
+  }
+
+  React.useEffect(() => {
     inputPlaceTitle.current.value = '';
     inputPlaceUrl.current.value = '';
-  }
+ }, [props.isOpen]);
 
   return (
     <PopupWithForm
